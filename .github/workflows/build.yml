@@ -1,0 +1,36 @@
+name: Kernel Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            build-essential flex bison bc \
+            libssl-dev libncurses-dev \
+            libelf-dev dwarves
+
+      - name: Make scripts executable
+        run: |
+          chmod +x prebuild_download.sh
+          chmod +x build_60x.sh
+          chmod +x download_setup_kernel_src.sh
+
+      - name: Download Kernel Src
+        run: ./download_setup_kernel_src.sh
+        
+      - name: Download and Setup prebuilts
+        run: ./prebuild_download.sh
+
+      - name: Run build
+        run: ./build_60x.sh
