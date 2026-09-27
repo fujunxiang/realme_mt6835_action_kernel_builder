@@ -20,6 +20,16 @@ jobs:
             libssl-dev libncurses-dev \
             libelf-dev dwarves
 
+      - name: Setup Swap
+        run: |
+          sudo swapoff -a
+          # 尝试 fallocate，失败则用 dd
+          sudo fallocate -l 8G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=8192 status=progress
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+           sudo swapon /swapfile
+          free -h
+          swapon --show
       - name: Make scripts executable
         run: |
           chmod +x prebuild_download.sh
