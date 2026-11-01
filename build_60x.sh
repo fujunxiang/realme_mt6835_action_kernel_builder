@@ -44,4 +44,4 @@ echo "Using 60x_defconfig..."
 make O=out 60x_defconfig
 
 echo "Starting build..."
-make O=out -j4
+make O=out -j1
